@@ -162,3 +162,11 @@ function getRelayState(url){
    }
   })
 }
+
+process.on('SIGINT', function(){
+  RELAY1.unexport();
+  RELAY2.unexport();
+  RELAY3.unexport();
+  RELAY4.unexport();
+  process.exit();
+})
