@@ -1,5 +1,5 @@
 var io = require('socket.io-client');
-var exec = require('child_process');
+var exec = require('child_process').exec;
 var gpio = require('onoff').Gpio;
 var Client = require('node-rest-client').Client;
 var client = new Client();
@@ -28,6 +28,12 @@ var RELAY_FAN = BASE_URL+"relay/update-relay/fan";
 var RELAY_SPRAY = BASE_URL+"relay/update-relay/spray";
 var RELAY_EXHAUST = BASE_URL+"relay/update-relay/exhaust";
 var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
+
+//delcare relay first
+RELAY1.writeSync(0)
+RELAY2.writeSync(0)
+RELAY3.writeSync(0)
+RELAY4.writeSync(0)
 
 //setup relay state
 getRelayState(BASE_RELAY_STATE)
@@ -134,31 +140,31 @@ function getRelayState(url){
   client.get(url, args, function(data, response){
    console.log("State relay data ", data)
    if(data.lamp){
-    RELAY1.writeSync(1);
+    RELAY1.writeSync(0);
    } 
    else{
-    RELAY1.writeSync(0);
+    RELAY1.writeSync(1);
    }
 
    if(data.fan){
-    RELAY2.writeSync(1);
+    RELAY2.writeSync(0);
    }
    else{
-    RELAY2.writeSync(0);
+    RELAY2.writeSync(1);
    }
 
    if(data.spray){
-    RELAY3.writeSync(1);
+    RELAY3.writeSync(0);
    }
    else{
-    RELAY3.writeSync(0);
+    RELAY3.writeSync(1);
    }
 
    if(data.exhaust){
-    RELAY4.writeSync(1);
+    RELAY4.writeSync(0);
    }
    else{
-    RELAY4.writeSync(0);
+    RELAY4.writeSync(1);
    }
   })
 }
