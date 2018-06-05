@@ -27,13 +27,14 @@ var RELAY_LAMP = BASE_URL+"relay/update-relay/lamp";
 var RELAY_FAN = BASE_URL+"relay/update-relay/fan";
 var RELAY_SPRAY = BASE_URL+"relay/update-relay/spray";
 var RELAY_EXHAUST = BASE_URL+"relay/update-relay/exhaust";
+var RELAY_SENSOR = BASE_URL+"relay/update-relay/sensor";
 var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
 
-//delcare relay first
-RELAY1.writeSync(0)
-RELAY2.writeSync(0)
-RELAY3.writeSync(0)
-RELAY4.writeSync(0)
+//delcare relay first to off
+RELAY1.writeSync(1)
+RELAY2.writeSync(1)
+RELAY3.writeSync(1)
+RELAY4.writeSync(1)
 
 //setup relay state
 getRelayState(BASE_RELAY_STATE)
@@ -57,7 +58,7 @@ sc.on('relay2', (data) => {
   if(data.status){
    RELAY2.writeSync(0);
    console.log('Relay Fan: ', data.status);
-   updateRelay(RELAY_FAN, false);
+   updateRelay(RELAY_FAN, true);
    createLogActivity(LOG_FAN, 'Fan Notification', 'Fan is turned on'); 
   }
   else{
@@ -95,6 +96,28 @@ sc.on('relay4', (data) => {
    console.log('Relay Exhaust: ', data.status);
    updateRelay(RELAY_EXHAUST, false);
    createLogActivity(LOG_EXHAUST, 'Exhaust Notification', 'Exhaust is turned off');
+  }
+})
+
+//readserial
+sc.on('readsensor', (data) => {
+  if(data.status){
+   console.log('Start to read sensor from waspmote')
+   updateRelay(RELAY_SENSOR, true)
+   exec('sudo systemctl start readserial.service', (err, stout, sterr) => {
+    if(err !== null){
+     console.log('exec error: ', err)
+    }
+   })
+  }
+  else{
+   console.log('Read sensor has stopped')
+   updateRelay(RELAY_SENSOR, false)
+   exec('sudo systemctl stop readserial.service', (err, stout, sterr) => {
+    if(err !== null){
+     console.log('exec error: ', err)
+    }
+   })
   }
 })
 

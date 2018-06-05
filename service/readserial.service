@@ -1,0 +1,10 @@
+[Unit]
+Description=Read serial port in raspi 
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/sudo /usr/bin/node /home/pi/broiler/readserial/readserial.js
+
+[Install]
+WantedBy=multi-user.targer
