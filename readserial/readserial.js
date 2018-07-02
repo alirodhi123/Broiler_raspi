@@ -38,13 +38,8 @@ parser.on('data', function (data) {
 			if(err) return console.log(err);
 			console.log("data terkirim");
 		})
-		//console.log ("Data received from waspmote")
-		//console.log ("Temperature: ", dataJSON.TCA)
-                //console.log ("Humidity: ", dataJSON.HUMA)
-                //console.log ("CO2: ", dataJSON.CO2)
-                //console.log ("Amonia: ", dataJSON.NH3)
-		//console.log ("Bat: ", dataJSON.BAT)
-                //console.log ("\n") 
+                // Put your code here
+ 
 	}
 
 	if(!isReadyOpen){

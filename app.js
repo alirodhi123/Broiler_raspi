@@ -4,6 +4,7 @@ var gpio = require('onoff').Gpio;
 var Client = require('node-rest-client').Client;
 var client = new Client();
 
+//var sc = io.connect('https://ali.jagopesan.com');
 var sc = io.connect('http://192.168.43.140:3038');
 
 //declare pin relay
@@ -13,7 +14,8 @@ var RELAY3 = new gpio(27, 'out');
 var RELAY4 = new gpio(22, 'out');
 
 //declare  base URL API
-var ID_USER = '5b02dc72584ab60f90b5076b';
+var ID_USER = '5b2cc36cadbf751d34d76a67';
+//var BASE_URL = 'https://ali.jagopesan.com/';
 var BASE_URL = 'http://192.168.43.140:3038/';
 
 //declare base URL Log
@@ -44,13 +46,13 @@ sc.on('relay1', (data) => {
    RELAY1.writeSync(0);
    console.log('Relay Lamp: ', data.status);
    updateRelay(RELAY_LAMP, true);
-   createLogActivity(LOG_LAMP, 'Lamp Notification', 'Lamp is turned on');
+   createLogActivity(LOG_LAMP, 'Lamp On', 'Lamp is turned on');
   }
   else{
    RELAY1.writeSync(1);
    console.log('Relay Lamp: ', data.status);
    updateRelay(RELAY_LAMP, false);
-   createLogActivity(LOG_LAMP, 'Lamp Notification', 'Lamp is turned off');
+   createLogActivity(LOG_LAMP, 'Lamp Off', 'Lamp is turned off');
   }
 })
 
@@ -59,13 +61,13 @@ sc.on('relay2', (data) => {
    RELAY2.writeSync(0);
    console.log('Relay Fan: ', data.status);
    updateRelay(RELAY_FAN, true);
-   createLogActivity(LOG_FAN, 'Fan Notification', 'Fan is turned on'); 
+   createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on'); 
   }
   else{
    RELAY2.writeSync(1);
    console.log('Relay Fan: ', data.status);
    updateRelay(RELAY_FAN, false);
-   createLogActivity(LOG_FAN, 'Fan Notofication', 'Fan is turned off');
+   createLogActivity(LOG_FAN, 'Fan Off', 'Fan is turned off');
   }
 })
 
@@ -74,13 +76,14 @@ sc.on('relay3', (data) => {
    RELAY3.writeSync(0);
    console.log('Relay Spray: ', data.status);
    updateRelay(RELAY_SPRAY, true);
-   createLogActivity(LOG_SPRAY, 'Spray Notification', 'Spray is turned on');
+   createLogActivity(LOG_SPRAY, 'Spray On', 'Spray is turned on');
+
   }
   else{
    RELAY3.writeSync(1);
    console.log('Relay Spray: ', data.status);
    updateRelay(RELAY_SPRAY, false);
-   createLogActivity(LOG_SPRAY, 'Spray Notification', 'Spray is turned off');
+   createLogActivity(LOG_SPRAY, 'Spray Off', 'Spray is turned off');
   }
 })
 
@@ -89,13 +92,13 @@ sc.on('relay4', (data) => {
    RELAY4.writeSync(0);
    console.log('Relay Exhaust: ', data.status);
    updateRelay(RELAY_EXHAUST, true);
-   createLogActivity(LOG_EXHAUST, 'Exhaust Notification', 'Exhaust is turned on');
+   createLogActivity(LOG_EXHAUST, 'Exhaust On', 'Exhaust is turned on');
   }
   else{
    RELAY4.writeSync(1);
    console.log('Relay Exhaust: ', data.status);
    updateRelay(RELAY_EXHAUST, false);
-   createLogActivity(LOG_EXHAUST, 'Exhaust Notification', 'Exhaust is turned off');
+   createLogActivity(LOG_EXHAUST, 'Exhaust Off', 'Exhaust is turned off');
   }
 })
 
@@ -161,7 +164,7 @@ function getRelayState(url){
   }
 
   client.get(url, args, function(data, response){
-   console.log("State relay data ", data)
+   console.log("State relay data: \n ", data)
    if(data.lamp){
     RELAY1.writeSync(0);
    } 
