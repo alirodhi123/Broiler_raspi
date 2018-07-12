@@ -3,6 +3,7 @@ var exec = require('child_process').exec;
 var gpio = require('onoff').Gpio;
 var Client = require('node-rest-client').Client;
 var client = new Client();
+var sleep = require('sleep')
 
 //var sc = io.connect('https://ali.jagopesan.com');
 var sc = io.connect('http://192.168.43.140:3038');
@@ -33,7 +34,7 @@ var RELAY_SENSOR = BASE_URL+"relay/update-relay/sensor";
 var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
 
 //delcare relay first to off
-RELAY1.writeSync(1)
+RELAY1.writeSync(0)
 RELAY2.writeSync(1)
 RELAY3.writeSync(1)
 RELAY4.writeSync(1)
@@ -43,13 +44,13 @@ getRelayState(BASE_RELAY_STATE)
 
 sc.on('relay1', (data) => {
   if(data.status){
-   RELAY1.writeSync(0);
+   RELAY1.writeSync(1);
    console.log('Relay Lamp: ', data.status);
    updateRelay(RELAY_LAMP, true);
    createLogActivity(LOG_LAMP, 'Lamp On', 'Lamp is turned on');
   }
   else{
-   RELAY1.writeSync(1);
+   RELAY1.writeSync(0);
    console.log('Relay Lamp: ', data.status);
    updateRelay(RELAY_LAMP, false);
    createLogActivity(LOG_LAMP, 'Lamp Off', 'Lamp is turned off');
@@ -77,7 +78,6 @@ sc.on('relay3', (data) => {
    console.log('Relay Spray: ', data.status);
    updateRelay(RELAY_SPRAY, true);
    createLogActivity(LOG_SPRAY, 'Spray On', 'Spray is turned on');
-
   }
   else{
    RELAY3.writeSync(1);
@@ -166,10 +166,10 @@ function getRelayState(url){
   client.get(url, args, function(data, response){
    console.log("State relay data: \n ", data)
    if(data.lamp){
-    RELAY1.writeSync(0);
+    RELAY1.writeSync(1);
    } 
    else{
-    RELAY1.writeSync(1);
+    RELAY1.writeSync(0);
    }
 
    if(data.fan){

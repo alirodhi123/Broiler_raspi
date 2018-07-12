@@ -10,12 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
+    "delay": "^3.0.0",
     "gpio": "^0.2.7",
     "node-rest-client": "^3.1.0",
     "npm": "^6.1.0",
     "onoff": "^3.1.0",
     "request": "^2.87.0",
     "serialport": "^6.2.0",
+    "sleep": "^5.1.1",
     "socket.io-client": "^2.1.1"
   }
 }
