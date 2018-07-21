@@ -35,9 +35,9 @@ var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
 
 //delcare relay first to off
 RELAY1.writeSync(0)
-RELAY2.writeSync(1)
-RELAY3.writeSync(1)
-RELAY4.writeSync(1)
+RELAY2.writeSync(0)
+RELAY3.writeSync(0)
+RELAY4.writeSync(0)
 
 //setup relay state
 getRelayState(BASE_RELAY_STATE)
@@ -59,13 +59,13 @@ sc.on('relay1', (data) => {
 
 sc.on('relay2', (data) => {
   if(data.status){
-   RELAY2.writeSync(0);
+   RELAY2.writeSync(1);
    console.log('Relay Fan: ', data.status);
    updateRelay(RELAY_FAN, true);
    createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on'); 
   }
   else{
-   RELAY2.writeSync(1);
+   RELAY2.writeSync(0);
    console.log('Relay Fan: ', data.status);
    updateRelay(RELAY_FAN, false);
    createLogActivity(LOG_FAN, 'Fan Off', 'Fan is turned off');
@@ -74,13 +74,13 @@ sc.on('relay2', (data) => {
 
 sc.on('relay3', (data) => {
   if(data.status){
-   RELAY3.writeSync(0);
+   RELAY3.writeSync(1);
    console.log('Relay Spray: ', data.status);
    updateRelay(RELAY_SPRAY, true);
    createLogActivity(LOG_SPRAY, 'Spray On', 'Spray is turned on');
   }
   else{
-   RELAY3.writeSync(1);
+   RELAY3.writeSync(0);
    console.log('Relay Spray: ', data.status);
    updateRelay(RELAY_SPRAY, false);
    createLogActivity(LOG_SPRAY, 'Spray Off', 'Spray is turned off');
@@ -89,13 +89,13 @@ sc.on('relay3', (data) => {
 
 sc.on('relay4', (data) => {
   if(data.status){
-   RELAY4.writeSync(0);
+   RELAY4.writeSync(1);
    console.log('Relay Exhaust: ', data.status);
    updateRelay(RELAY_EXHAUST, true);
    createLogActivity(LOG_EXHAUST, 'Exhaust On', 'Exhaust is turned on');
   }
   else{
-   RELAY4.writeSync(1);
+   RELAY4.writeSync(0);
    console.log('Relay Exhaust: ', data.status);
    updateRelay(RELAY_EXHAUST, false);
    createLogActivity(LOG_EXHAUST, 'Exhaust Off', 'Exhaust is turned off');
@@ -173,32 +173,25 @@ function getRelayState(url){
    }
 
    if(data.fan){
-    RELAY2.writeSync(0);
+    RELAY2.writeSync(1);
    }
    else{
-    RELAY2.writeSync(1);
+    RELAY2.writeSync(0);
    }
 
    if(data.spray){
-    RELAY3.writeSync(0);
+    RELAY3.writeSync(1);
    }
    else{
-    RELAY3.writeSync(1);
+    RELAY3.writeSync(0);
    }
 
    if(data.exhaust){
-    RELAY4.writeSync(0);
+    RELAY4.writeSync(1);
    }
    else{
-    RELAY4.writeSync(1);
+    RELAY4.writeSync(0);
    }
   })
 }
 
-process.on('SIGINT', function(){
-  RELAY1.unexport();
-  RELAY2.unexport();
-  RELAY3.unexport();
-  RELAY4.unexport();
-  process.exit();
-})
