@@ -31,6 +31,7 @@ var RELAY_FAN = BASE_URL+"relay/update-relay/fan";
 var RELAY_SPRAY = BASE_URL+"relay/update-relay/spray";
 var RELAY_EXHAUST = BASE_URL+"relay/update-relay/exhaust";
 var RELAY_SENSOR = BASE_URL+"relay/update-relay/sensor";
+var RELAY_OTOMATIS = BASE_URL+"relay/update-relay/otomatis";
 var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
 
 //delcare relay first to off
@@ -117,6 +118,28 @@ sc.on('readsensor', (data) => {
    console.log('Read sensor has stopped')
    updateRelay(RELAY_SENSOR, false)
    exec('sudo systemctl stop readserial.service', (err, stout, sterr) => {
+    if(err !== null){
+     console.log('exec error: ', err)
+    }
+   })
+  }
+})
+
+//otomatis
+sc.on('otomatis', (data) => {
+  if(data.status){
+   console.log('Start to automation')
+   updateRelay(RELAY_OTOMATIS, true)
+   exec('sudo systemctl start otomatis.service', (err, stout, sterr) => {
+    if(err !== null){
+     console.log('exec error: ', err)
+    }
+   })
+  }
+  else{
+   console.log('Automation has stopped')
+   updateRelay(RELAY_OTOMATIS, false)
+   exec('sudo systemctl stop otomatis.service', (err, stout, sterr) => {
     if(err !== null){
      console.log('exec error: ', err)
     }

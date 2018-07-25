@@ -7,4 +7,4 @@ Type=idle
 ExecStart=/usr/bin/sudo /usr/bin/node /home/pi/broiler/readserial/readserial.js
 
 [Install]
-WantedBy=multi-user.targer
+WantedBy=multi-user.target
