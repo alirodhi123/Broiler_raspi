@@ -5,8 +5,8 @@ var Client = require('node-rest-client').Client;
 var client = new Client();
 var sleep = require('sleep')
 
-//var sc = io.connect('https://ali.jagopesan.com');
-var sc = io.connect('http://192.168.43.140:3038');
+var sc = io.connect('https://ali.jagopesan.com');
+//var sc = io.connect('http://192.168.43.140:3038');
 
 //declare pin relay
 var RELAY1 = new gpio(4, 'out');
@@ -16,8 +16,8 @@ var RELAY4 = new gpio(22, 'out');
 
 //declare  base URL API
 var ID_USER = '5b2cc36cadbf751d34d76a67';
-//var BASE_URL = 'https://ali.jagopesan.com/';
-var BASE_URL = 'http://192.168.43.140:3038/';
+var BASE_URL = 'https://ali.jagopesan.com/';
+//var BASE_URL = 'http://192.168.43.140:3038/';
 
 //declare base URL Log
 var LOG_LAMP = BASE_URL+"log/log-lamp";

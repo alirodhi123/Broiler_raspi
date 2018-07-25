@@ -3,7 +3,8 @@ var Readline = SerialPort.parsers.Readline;
 var req = require('request');
 var sleep = require('sleep');
 var delay = require('delay');
-var url = "http://192.168.43.140:3038/sensor";
+//var url = "http://192.168.43.140:3038/sensor";
+var url = "http://ali.jagopesan.com/senor";
 
 var gpio = require('onoff').Gpio;
 var Client = require('node-rest-client').Client;
