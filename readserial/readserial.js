@@ -5,8 +5,8 @@ var sc = io.connect('nama alamat url');
 var req = require('request');
 var sleep = require('sleep');
 var delay = require('delay');
-//var url = "http://192.168.43.140:3038/sensor";
-var url = "http://ali.jagopesan.com/sensor";
+var url = "http://192.168.43.140:3038/sensor";
+//var url = "https://ali.jagopesan.com/sensor";
 
 var tempCache = 0;
 var humCache = 0;

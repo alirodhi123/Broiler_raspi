@@ -3,8 +3,8 @@ var Readline = SerialPort.parsers.Readline;
 var req = require('request');
 var sleep = require('sleep');
 var delay = require('delay');
-//var url = "http://192.168.43.140:3038/sensor";
-var url = "http://ali.jagopesan.com/senor";
+var url = "http://192.168.43.140:3038/sensor";
+//var url = "https://ali.jagopesan.com/sensor";
 
 var gpio = require('onoff').Gpio;
 var Client = require('node-rest-client').Client;
@@ -56,7 +56,7 @@ var isReadyOpen = false
 var parser = new Readline();
 serialPort.pipe(parser);
 parser.on('data', async (data) => {
- if(isReadyOpen){	
+ if(isReadyOpen){
   let sensor = data.split('#');
   let dataSensor = sensor.slice(5, 9) 
   let nativeJson = '{'
@@ -80,12 +80,13 @@ parser.on('data', async (data) => {
 	if (tempVal < 32) {
 	  RELAY1.writeSync(1)
           updateRelay(RELAY_LAMP, true)
-          createLogActivity(LOG_LAMP, 'Lamp On', 'Lamp is turned on')
+         // createLogActivity(LOG_LAMP, 'Lamp On', 'Lamp is turned on')
 
           RELAY2.writeSync(0)
           updateRelay(RELAY_FAN, false)
          // createLogActivity(LOG_FAN, 'Lamp Off', 'Lamp is turned off')
 
+	  RELAY4.writeSync(0)
           if (humVal > 70){
             RELAY1.writeSync(1)
            // updateRelay(RELAY_LAMP, true)
@@ -94,21 +95,24 @@ parser.on('data', async (data) => {
 	} //tutup if temp < 32
 
         else if (tempVal >= 32 && tempVal <= 34){
-          RELAY1.writeSync(0)
-          updateRelay(RELAY_LAMP, false)
-          createLogActivity(LOG_LAMP, 'Lamp Off', 'Lamp is turnerd off')
+          RELAY1.writeSync(1)
+          updateRelay(RELAY_LAMP, true)
+         // createLogActivity(LOG_LAMP, 'Lamp Off', 'Lamp is turnerd off')
+
+         // RELAY4.writeSync(1)
+         // updateRelay(RELAY_FAN, true)
 
           if (humVal >= 50 && humVal <= 70){
             RELAY2.writeSync(0)
             updateRelay(RELAY_FAN, false)
-            createLogActivity(LOG_FAN, 'Fan Off', 'Fan is turned off')
+           // createLogActivity(LOG_FAN, 'Fan Off', 'Fan is turned off')
           } 
         } //tutup if temp normal
 
         else if (tempVal > 34){
           RELAY2.writeSync(1)
           updateRelay(RELAY_FAN, true)
-          createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on')
+         // createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on')
 
           RELAY4.writeSync(1)
           updateRelay(RELAY_EXHAUST, true)
@@ -120,7 +124,7 @@ parser.on('data', async (data) => {
           if (humVal < 50){
             RELAY2.writeSync(1)
             updateRelay(RELAY_FAN, true)
-            createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on')
+           // createLogActivity(LOG_FAN, 'Fan On', 'Fan is turned on')
 
             RELAY1.writeSync(0)
             updateRelay(RELAY_LAMP, false)
@@ -141,7 +145,7 @@ parser.on('data', async (data) => {
         } else {
           RELAY3.writeSync(0)
           updateRelay(RELAY_SPRAY, false)
-          createLogActivity(LOG_SPRAY, 'Spray Off', 'Spray is turned off')
+        //  createLogActivity(LOG_SPRAY, 'Spray Off', 'Spray is turned off')
         } // tutup ammonia > 20
 
     //Kirim data ke server

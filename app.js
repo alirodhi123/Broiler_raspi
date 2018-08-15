@@ -5,8 +5,8 @@ var Client = require('node-rest-client').Client;
 var client = new Client();
 var sleep = require('sleep')
 
-var sc = io.connect('https://ali.jagopesan.com');
-//var sc = io.connect('http://192.168.43.140:3038');
+//var sc = io.connect('https://ali.jagopesan.com');
+var sc = io.connect('http://192.168.43.140:3038');
 
 //declare pin relay
 var RELAY1 = new gpio(4, 'out');
@@ -16,8 +16,8 @@ var RELAY4 = new gpio(22, 'out');
 
 //declare  base URL API
 var ID_USER = '5b2cc36cadbf751d34d76a67';
-var BASE_URL = 'https://ali.jagopesan.com/';
-//var BASE_URL = 'http://192.168.43.140:3038/';
+//var BASE_URL = 'https://ali.jagopesan.com/';
+var BASE_URL = 'http://192.168.43.140:3038/';
 
 //declare base URL Log
 var LOG_LAMP = BASE_URL+"log/log-lamp";
@@ -33,6 +33,10 @@ var RELAY_EXHAUST = BASE_URL+"relay/update-relay/exhaust";
 var RELAY_SENSOR = BASE_URL+"relay/update-relay/sensor";
 var RELAY_OTOMATIS = BASE_URL+"relay/update-relay/otomatis";
 var BASE_RELAY_STATE = BASE_URL+"relay/get-relay/state";
+
+//set up capture image
+var LOKASI_FOTO = "/home/pi/file_foto/"
+var BASE_UPLOAD_FOTO = BASE_URL+"upload_image/images/upload"
 
 //delcare relay first to off
 RELAY1.writeSync(0)
@@ -146,6 +150,20 @@ sc.on('otomatis', (data) => {
    })
   }
 })
+
+//Ambil foto
+sc.on('ambilfoto', (data) => {
+ console.log('Take Picture...');
+ exec('raspistill -o '+LOKASI_FOTO+data.status+'.jpg', (err, stout, sterr) => {
+  console.log('stout: ', stout);
+  console.log('sterr: ', sterr);
+  //exec("curl -F file_foto=@/home/pi/"+data.msg+".jpg https://rmvts.herokuapp.com/api/images/upload", (err, stout, sterr) => {
+  exec("curl -F id_user="+ID_USER+" -F file_foto=@"+LOKASI_FOTO+data.status+".jpg "+BASE_UPLOAD_FOTO, (err, stout, sterr) => {
+   console.log('stout: ', stout);
+   console.log('sterr: ', sterr);
+  });
+ });
+});
 
 function updateRelay(url, status){
   var args = {
